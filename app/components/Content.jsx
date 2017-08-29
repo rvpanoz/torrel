@@ -2,31 +2,14 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import List from './List.jsx';
 
+import Torrents from '../torrents';
+
 export default class Content extends React.Component {
   constructor(props) {
     super(props);
   }
   render() {
-    let torrents = [
-      // {
-      //   desc: "http://www.1337x.to/torrent/2239931/The-LEGO-Batman-Movie-2017-720p-YTS-YIFY/",
-      //   peers: 1610,
-      //   provider: "1337x",
-      //   seeds: 4594,
-      //   size: "764.5 MB",
-      //   time: "Jun. 1st '17",
-      //   title: "The LEGO Batman Movie (2017) [720p] [YTS] [YIFY]"
-      // },
-      // {
-      //   desc: "http://www.1337x.to/torrent/2239931/The-LEGO-Batman-Movie-2017-720p-YTS-YIFY/",
-      //   peers: 1610,
-      //   provider: "1337x",
-      //   seeds: 4594,
-      //   size: "764.5 MB",
-      //   time: "Jun. 1st '17",
-      //   title: "The LEGO Batman Movie (2017) [720p] [YTS] [YIFY]"
-      // }
-    ];
+    let torrents = new Torrents(10);
     let is_visible = this.props.isVisible;
 
     if (this.props.torrents) {

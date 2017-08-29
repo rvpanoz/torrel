@@ -27,8 +27,8 @@ app.get('/query', function(req, res) {
 
   //remove quotes
   let _query = query.replace(/["']{1}/gi,'');
-  
-  torrentSearch.search(_query, 'Movies')
+
+  torrentSearch.search(_query, 'Movies', '100')
     .then(torrents => {
       res.send({
         success: true,
@@ -39,16 +39,6 @@ app.get('/query', function(req, res) {
       console.log(err);
     });
 })
-
-function check(req, res, next) {
-  console.log(req.query);
-  next();
-}
-
-app.get('/download', check, function(req, resp) {
-  let torrent = req.query;
-  resp.send('ok');
-});
 
 app.listen(3001, function() {
   console.log('Server listening on port 3001')

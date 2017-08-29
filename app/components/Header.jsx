@@ -1,3 +1,4 @@
+import config from '../config';
 import React from 'react';
 import ReactDOM from 'react-dom';
 
@@ -7,13 +8,16 @@ class SearchBar extends React.Component {
     this.state = {
       query: props.query || ''
     }
-    this.focus = this.focus.bind(this);
+    this._focus = this._focus.bind(this);
     this.onChangeQuery = this.onChangeQuery.bind(this);
     this.onChangeProvider = this.onChangeProvider.bind(this);
     this.onSubmitEvent = this.onSubmitEvent.bind(this);
   }
-  focus() {
+  _focus() {
     this.textInput.focus();
+  }
+  _setValue(value) {
+    this.textInput.value = value;
   }
   onChangeProvider(e) {
     this.setState({provider: e.target.value});
@@ -33,8 +37,7 @@ class SearchBar extends React.Component {
     this.setState({
       query: 'batman'
     });
-    // this.props.handleQuery('batman');
-    this.focus();
+    this._focus();
   }
   render() {
     return (
@@ -54,7 +57,7 @@ const Logo = (props) => {
     <div className="title-bar">
       <a href="#">
         <span className="nav-main-title">
-          Reactor
+          {config.appName}
         </span>
       </a>
     </div>
