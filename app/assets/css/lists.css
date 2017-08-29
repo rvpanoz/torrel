@@ -8,7 +8,7 @@
 
 .list-item {
   position: relative;
-  height: 125px;
+  height: 150px;
   width: 520px;
   display: block;
   margin-top: 10px;
@@ -35,14 +35,8 @@
 
 .list-item .provider {
   display: block;
-  margin: 15px 25px;
-  font-size: 12px;
-  font-weight: 700;
-  line-height: 16px;
-  padding: 17px;
-  position: absolute;
-  right: 0;
-  top: 0;
+  width: 85px;
+  text-align: center;
 }
 
 .list-item .bottom {
@@ -85,6 +79,11 @@
   color: #3B3C3B;
 }
 
+.list-item .download {
+  vertical-align: middle;
+  margin: 0 10px;
+}
+
 .list-item .size {
   font-size: 13px;
   vertical-align: middle;
@@ -94,4 +93,14 @@
 .list-item .time {
   font-size: 13px;
   vertical-align: middle;
+}
+
+.list-item .download a {
+  text-decoration: none;
+  color: burlywood;
+}
+
+.list-item .download a:hover {
+  text-decoration: underline;;
+  color: #8DC63F;
 }

@@ -59,14 +59,17 @@ class App extends React.Component {
     }
     this.handleQuery = this.handleQuery.bind(this);
   }
-  handleQuery(query) {
+  handleQuery(query, cb) {
     this.setState({showMask: true});
-    axios.get(`${config.baseUrl}?query=${query}\&category=${config.defaultCategory}`, config).then((resp) => {
+    axios.get(`${config.baseUrl}/search?query=${query}\&category=${config.defaultCategory}`).then((resp) => {
         setTimeout(() => {
           this.setState((prevState, props) => ({
             showMask: false,
             torrents: resp.data.data
           }));
+          if(cb && typeof cb === 'function') {
+            cb();
+          }
         }, 1500)
     });
   }

@@ -1,11 +1,11 @@
 /* nav header */
 
 .nav-main {
-  background: #991a77;
+  background: #fafafa;
   color: #fafafa;
   position: fixed;
   top: 0;
-  height: 60px;
+  height: 70px;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
   width: 100%;
   z-index: 100;
@@ -68,6 +68,10 @@
   }
 }
 
+img.logo {
+  background-image: url('../images/torrel.png');
+}
+
 .title-bar>a {
   text-decoration: none;
 }
@@ -96,14 +100,15 @@
 }
 
 .search-bar input {
-  color: #fff;
+  color: #A2A2A4;
   text-align: left;
-  width: 30rem;
+  width: 42rem;
   font-family: roboto;
   transition: .5s;
   border: none;
   box-shadow: none;
   outline: none;
   font-size: 2rem;
+  display: inline-block;
   background: transparent;
 }

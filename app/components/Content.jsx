@@ -9,7 +9,7 @@ export default class Content extends React.Component {
     super(props);
   }
   render() {
-    let torrents = new Torrents(10);
+    let torrents = [];
     let is_visible = this.props.isVisible;
 
     if (this.props.torrents) {

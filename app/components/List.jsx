@@ -1,3 +1,4 @@
+import config from '../config';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import axios from 'axios';
@@ -5,12 +6,33 @@ import axios from 'axios';
 class ListItem extends React.Component {
   constructor(props) {
     super(props);
+    this.handleDownload = this.handleDownload.bind(this);
+  }
+  handleDownload(e) {
+    e.preventDefault();
+    let torrent = {};
+
+    for (let prop in this.props) {
+      if (prop !== 'key') {
+        torrent[prop] = this.props[prop];
+      }
+    }
+
+    axios.get(`${config.baseUrl}/download`, {
+      params: {
+        torrent: torrent,
+        responseType: 'arraybuffer'
+      }
+    }).then((response) => {
+      //TODO
+      console.log(response);
+    });
   }
   render() {
     return (
       <li className="list-item">
         <div className="top">
-          <span className="title">{this.props.title}</span>
+          <span className="title long-text">{this.props.title}</span>
           <span className="provider">{this.props.provider}</span>
         </div>
         <div className="bottom">
@@ -25,6 +47,11 @@ class ListItem extends React.Component {
               <i className="fa fa-user"></i>&nbsp;Seeds&nbsp;{this.props.seeds}</span>
             <span className="peers">
               <i className="fa fa-user"></i>&nbsp;Peers&nbsp;{this.props.peers}</span>
+            <span className="download">
+              <a className="download" onClick={this.handleDownload} href="#">
+                <i className="fa fa-download"></i>&nbsp;Download
+              </a>
+            </span>
           </div>
         </div>
       </li>
