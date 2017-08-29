@@ -14,8 +14,14 @@ app.get('/download', function(req, res) {
     torrent
   } = req.query || {}, success = false, data;
 
-  torrent = JSON.parse(torrent);
+  if(!torrent) {
+    res.send({
+      success: false,
+      message: '[torrent] parameter is not defined.'
+    });
+  }
 
+  torrent = JSON.parse(torrent);
   torrentSearch.downloadTorrent(torrent)
     .then(buffer => {
       const title = torrent.title;
@@ -52,6 +58,8 @@ app.get('/download', function(req, res) {
 app.get('/search', function(req, res) {
   const torrentSearch = new TorrentSearchApi();
 
+  console.log(req.query);
+
   let {
     query,
     category
@@ -60,20 +68,18 @@ app.get('/search', function(req, res) {
   if (!query) {
     return res.send({
       success: false,
-      error: 'query parameter is not defined.'
+      error: '[query] parameter is not defined.'
     });
   }
 
+  query = query.replace(/["']{1}/gi, '');
 
   torrentSearch.enableProvider('Torrent9');
-  torrentSearch.enableProvider('1337x');
+  // torrentSearch.enableProvider('1337x');
   // torrentSearch.enableProvider('ThePirateBay');
   // torrentSearch.enableProvider('Torrentz2');
 
-  //remove quotes
-  let _query = query.replace(/["']{1}/gi, '');
-  console.log(decodeURI(_query));
-  torrentSearch.search(decodeURI(_query), 'Movies', '100')
+  torrentSearch.search(query, 'Movies', '10')
     .then(torrents => {
       res.send({
         success: true,

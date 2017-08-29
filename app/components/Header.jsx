@@ -6,12 +6,8 @@ import LogoImage from '../assets/css/images/torrel.png';
 class SearchBar extends React.Component {
   constructor(props) {
     super(props)
-    this.state = {
-      query: props.query || ''
-    }
     this._focus = this._focus.bind(this);
     this.onChangeQuery = this.onChangeQuery.bind(this);
-    this.onChangeProvider = this.onChangeProvider.bind(this);
     this.onSubmitEvent = this.onSubmitEvent.bind(this);
     this._setEnabled = this._setEnabled.bind(this);
   }
@@ -22,38 +18,40 @@ class SearchBar extends React.Component {
     this.textInput.value = value;
   }
   _setDisabled() {
+    this.buttonSubmit.disabled = true;
     this.textInput.disabled = true;
   }
   _setEnabled() {
+    this.buttonSubmit.disabled = false;
     this.textInput.disabled = false;
-  }
-  onChangeProvider(e) {
-    this.setState({provider: e.target.value});
   }
   onChangeQuery(e) {
     this.setState({query: e.target.value});
   }
   onSubmitEvent(e) {
     e.preventDefault();
-    let query = this.state.query;
     this._setDisabled();
+
+    let query = this.textInput.value;
     if (query.length) {
       this.props.handleQuery(query, this._setEnabled);
     }
     return false;
   }
   componentDidMount() {
-    this.setState({query: 'batman'});
     this._focus();
   }
   render() {
+    console.log('header render');
     return (
       <div className="search-bar">
         <form onSubmit={this.onSubmitEvent}>
-          <input value={this.state.query} type="text" placeholder="Search for torrents..." className="search-query" ref={(input) => {
+          <input type="text" placeholder="Search for torrents..." className="search-query" ref={(input) => {
             this.textInput = input;
-          }} onChange={this.onChangeQuery}/>
-          <button type="submit">Search</button>
+          }} />
+        <button ref={(button) => {
+            this.buttonSubmit = button;
+          }} type="submit">Search</button>
         </form>
       </div>
     )

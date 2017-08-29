@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import List from './List.jsx';
-
+import ActionBar from './ActionBar.jsx';
 import Torrents from '../torrents';
 
 export default class Content extends React.Component {
@@ -9,6 +9,7 @@ export default class Content extends React.Component {
     super(props);
   }
   render() {
+    console.log('content render');
     let torrents = [];
     let is_visible = this.props.isVisible;
 
@@ -21,15 +22,18 @@ export default class Content extends React.Component {
     }
 
     return (
-      <div className="wrap" ref={(el) => {
+      <div className="wrap" style={{
+        display: (!is_visible)
+          ? 'none'
+          : 'flex'
+      }} ref={(el) => {
         this.el = el;
       }}>
-        <section className="list" style={{
-          display: (!is_visible)
-            ? 'none'
-            : 'block'
-        }}>
+        <section className="list">
           <List torrents={torrents}/>
+        </section>
+        <section className="action-bar">
+          <ActionBar />
         </section>
       </div>
     )

@@ -67,6 +67,7 @@ export default class List extends React.Component {
     }
   }
   render() {
+    console.log('list render')
     if (!this.props.torrents) {
       return null;
     }
