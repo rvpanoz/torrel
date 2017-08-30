@@ -3,8 +3,18 @@
   border: 0 !important;
 }
 
+.table-responsive {
+  overflow-x:hidden;
+}
+
+/** CUSTOMS **/
 .search-query {
   min-width: 650px !important;
+}
+
+.main__content {
+  margin-top: 25px;
+  overflow: hidden;
 }
 
 /** LOADING */

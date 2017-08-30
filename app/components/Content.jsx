@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import List from './List.jsx';
 
 export default class Content extends React.Component {
   constructor(props) {
@@ -18,8 +19,19 @@ export default class Content extends React.Component {
     }
 
     return (
-      <div className="container-fluid">
-
+      <div className="container-fluid main__content" style={{
+        display: (!this.props.isVisible)
+          ? 'none'
+          : 'block'
+      }} ref={(el) => {
+        this.el = el;
+      }}>
+        <div className="row">
+          <div className="col-xs-12">
+            <h3 className="page-header"></h3>
+            <List torrents={torrents}/>
+          </div>
+        </div>
       </div>
     )
   }

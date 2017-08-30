@@ -30,7 +30,7 @@ const Layout = (props) => {
       <div className="split-pane-header">
         {props.header}
       </div>
-      <div className="split-pane-content wrapper">
+      <div className="split-pane-content wrapper alt">
         {props.content}
       </div>
     </div>
@@ -69,7 +69,7 @@ class App extends React.Component {
         <AppLoader isLoading={this.state.showLoader} ref={(el) => {
           this.loader = el;
         }}/>
-        <Layout header={< Header handleQuery = {
+      <Layout header={< Header handleQuery = {
           this.handleQuery
         } />} content= {<Content isVisible={!this.state.showLoader
       } torrents = {
