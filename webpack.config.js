@@ -23,10 +23,16 @@ module.exports = {
       loader: 'babel-loader',
       exclude: /node_modules/
     }, {
+      test: /\.css$/,
+      loader: ['style-loader', 'css-loader']
+    }, {
       test: /\.(png|jpg|gif|svg)$/,
       use: [{
         loader: 'file-loader'
       }]
+    }, {
+      test: /\.(ttf|otf|eot|svg|woff(2)?)(\?[a-z0-9]+)?$/,
+      loader: 'file-loader?name=[name].[ext]'
     }]
   }
 }

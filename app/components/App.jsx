@@ -8,27 +8,17 @@ import config from '../config';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import axios from 'axios';
+
+import AppLoader from './AppLoader.jsx';
 import Header from './Header.jsx';
 import Content from './Content.jsx';
 
-/**
- * [Mask description]
- * @param {[type]} props [description]
- */
-const Mask = (props) => {
-  let is_loading = props.isLoading;
-  return (
-    <div id="loader" className={(is_loading)
-      ? 'show'
-      : 'hide'}>
-      <p>Loading torrents..</p>
-      <div className="line"></div>
-      <div className="line"></div>
-      <div className="line"></div>
-      <div className="line"></div>
-    </div>
-  )
-}
+//import css
+import bootstrapCSS from 'bootstrap/dist/css/bootstrap.css';
+import themeCSS from '../assets/css/theme.css';
+import appCSS from '../assets/css/app.css';
+
+
 
 /**
  * [Layout description]
@@ -40,7 +30,7 @@ const Layout = (props) => {
       <div className="split-pane-header">
         {props.header}
       </div>
-      <div className="split-pane-content">
+      <div className="split-pane-content wrapper">
         {props.content}
       </div>
     </div>
@@ -48,23 +38,23 @@ const Layout = (props) => {
 }
 
 /**
- *
+ * App component
  */
 class App extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      showMask: false,
+      showLoader: false,
       torrents: []
     }
     this.handleQuery = this.handleQuery.bind(this);
   }
   handleQuery(query, cb) {
-    this.setState({showMask: true});
+    this.setState({showLoader: true});
     axios.get(`${config.baseUrl}/search?query=${query}\&category=${config.defaultCategory}`).then((resp) => {
         setTimeout(() => {
           this.setState((prevState, props) => ({
-            showMask: false,
+            showLoader: false,
             torrents: resp.data.data
           }));
           if(cb && typeof cb === 'function') {
@@ -75,13 +65,13 @@ class App extends React.Component {
   }
   render() {
     return (
-      <div className="container">
-        <Mask isLoading={this.state.showMask} ref={(el) => {
-          this.mask = el;
+      <div className="app_content__wrapper">
+        <AppLoader isLoading={this.state.showLoader} ref={(el) => {
+          this.loader = el;
         }}/>
         <Layout header={< Header handleQuery = {
           this.handleQuery
-        } />} content= {<Content isVisible={!this.state.showMask
+        } />} content= {<Content isVisible={!this.state.showLoader
       } torrents = {
         this.state.torrents
       } />}/>
@@ -91,4 +81,4 @@ class App extends React.Component {
 };
 
 ReactDOM.render(
-  <App/>, document.getElementById('wrapper'))
+  <App/>, document.getElementById('app_content'));

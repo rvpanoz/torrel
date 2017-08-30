@@ -1,9 +1,8 @@
 import config from '../config';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import LogoImage from '../assets/css/images/torrel.png';
 
-class SearchBar extends React.Component {
+class SearchForm extends React.Component {
   constructor(props) {
     super(props)
     this._focus = this._focus.bind(this);
@@ -42,31 +41,23 @@ class SearchBar extends React.Component {
     this._focus();
   }
   render() {
-    console.log('header render');
     return (
-      <div className="search-bar">
-        <form onSubmit={this.onSubmitEvent}>
-          <input type="text" placeholder="Search for torrents..." className="search-query" ref={(input) => {
+      <form onSubmit={this.onSubmitEvent} className="navbar-form navbar-left hidden-xs" role="search">
+        <div className="input-group">
+          <input type="text" placeholder="Search for torrents..." className="form-control search-query" ref={(input) => {
             this.textInput = input;
-          }} />
-        <button ref={(button) => {
-            this.buttonSubmit = button;
-          }} type="submit">Search</button>
-        </form>
-      </div>
+          }}/>
+          <div className="input-group-btn">
+            <button ref={(button) => {
+              this.buttonSubmit = button;
+            }} type="submit" className="btn btn-link">
+              <i className="fa fa-search"></i>
+            </button>
+          </div>
+        </div>
+      </form>
     )
   }
-}
-
-const Logo = (props) => {
-  return (
-    <div className="title-bar">
-      <a href="#">
-        <span className="nav-main-title">
-        </span>
-      </a>
-    </div>
-  )
 }
 
 export default class Header extends React.Component {
@@ -75,11 +66,19 @@ export default class Header extends React.Component {
   }
   render() {
     return (
-      <div className="nav-main">
-        <div className="wrap">
-          <SearchBar handleQuery={this.props.handleQuery}/>
+      <nav className="navbar navbar-default">
+        <div className="container-fluid">
+          <div className="collapse navbar-collapse" id="navbar_main">
+            <a className="navbar-brand" href="#">
+              {config.appName}
+            </a>
+            <SearchForm handleQuery={this.props.handleQuery}/>
+            <a href="#" className="navbar-btn navbar-right btn btn-accent">
+              Filters
+            </a>
+          </div>
         </div>
-      </div>
-    );
+      </nav>
+    )
   }
 }
