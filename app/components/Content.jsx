@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import List from './List.jsx';
+import Filters from './Filters.jsx';
 
 export default class Content extends React.Component {
   constructor(props) {
@@ -32,6 +33,7 @@ export default class Content extends React.Component {
             <List torrents={torrents}/>
           </div>
         </div>
+        <Filters/>
       </div>
     )
   }

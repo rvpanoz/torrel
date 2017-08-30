@@ -69,13 +69,10 @@ export default class Header extends React.Component {
       <nav className="navbar navbar-default">
         <div className="container-fluid">
           <div className="collapse navbar-collapse" id="navbar_main">
-            <a className="navbar-brand" href="#">
+            <a className="navbar-brand" href="#" style={{display: 'none'}}>
               {config.appName}
             </a>
             <SearchForm handleQuery={this.props.handleQuery}/>
-            <a href="#" className="navbar-btn navbar-right btn btn-accent">
-              Filters
-            </a>
           </div>
         </div>
       </nav>

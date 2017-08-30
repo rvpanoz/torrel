@@ -31,20 +31,17 @@ class ListItem extends React.Component {
   render() {
     return (
       <tr role="row">
-        <td><p>{this.props.title}</p></td>
+        <td>
+          <p>{this.props.title}</p>
+        </td>
         <td>{this.props.peers}</td>
         <td>{this.props.seeds}</td>
         <td>{this.props.size}</td>
         <td>{this.props.time}</td>
+        <td>
+          <a href="#" onClick={this.handleDownload} className="btn btn-primary download">Dowload</a>
+        </td>
       </tr>
-    )
-  }
-}
-
-class Filters extends React.Component {
-  render() {
-    return (
-      <div className="filters"></div>
     )
   }
 }
@@ -63,33 +60,32 @@ export default class List extends React.Component {
     }
 
     return (
-      <div className="panel panel-default">
-        <div className="panel-heading">
-          <h3 className="panel-title">Torrents</h3>
-        </div>
-        <div className="panel-body">
-          <div className="table-responsive">
-            <div className="row">
-              <div className="col-xs=12">
-                <Filters/>
-              </div>
-            </div>
-            <div className="row">
-              <div className="col-xs=12">
-                <table className="table">
-                  <thead>
-                    <tr role="row">
-                      <th>Title</th>
-                      <th className="sorting">Peers</th>
-                      <th className="sorting">Seeds</th>
-                      <th className="sorting">Size</th>
-                      <th className="sorting">Time</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {this.props.torrents.map((torrent, idx) => <ListItem key={idx} {...torrent}/>)}
-                  </tbody>
-                </table>
+      <div>
+        <div className="panel panel-default" style={{display: 'block'}}>
+          <div className="panel-heading">
+            <h3 className="panel-title">Results</h3>
+            <i className="fa fa-settings"></i>
+          </div>
+          <div className="panel-body">
+            <div className="table-responsive">
+              <div className="row">
+                <div className="col-xs=12">
+                  <table className="table">
+                    <thead>
+                      <tr role="row">
+                        <th>Title</th>
+                        <th className="sorting">Peers</th>
+                        <th className="sorting">Seeds</th>
+                        <th className="sorting">Size</th>
+                        <th className="sorting">{`Date`}</th>
+                        <th></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {this.props.torrents.map((torrent, idx) => <ListItem key={idx} {...torrent}/>)}
+                    </tbody>
+                  </table>
+                </div>
               </div>
             </div>
           </div>
