@@ -47,10 +47,12 @@ class App extends React.Component {
     }
     this.handleQuery = this.handleQuery.bind(this);
   }
+  componentWillUnmount() {
+    this.serverRequest.abort();
+  }
   handleQuery(q, cb) {
-    console.log(q);
     this.setState({showLoader: true, torrents: []}); //clear
-    axios.get(`${config.baseUrl}/search?query=${q[0]}\&provider=${q[1]}\&category=${config.defaultCategory}`).then((resp) => {
+    this.serverRequest = axios.get(`${config.baseUrl}/search?query=${q[0]}\&provider=${q[1]}\&category=${config.defaultCategory}`).then((resp) => {
       setTimeout(() => {
         this.setState((prevState, props) => ({showLoader: false, torrents: resp.data.data}));
         if (cb && typeof cb === 'function') {

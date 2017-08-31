@@ -7,14 +7,16 @@ const TorrentSearchApi = require('torrent-search-api');
 const moment = require('moment');
 const torrentSearch = new TorrentSearchApi();
 
+const Providers = torrentSearch.getProviders().filter((provider, idx) => {
+  return provider.public;
+})
+
 app.use(cors()); //use cors middleware
-torrentSearch.enableProvider('1337x'); //default provider
 
 app.get('/providers', (req, res) => {
-  let providers = torrentSearch.getProviders();
   res.send({
     success: true,
-    data: providers
+    data: Providers
   })
 });
 
@@ -84,16 +86,17 @@ app.get('/search', (req, res) => {
 
   let _provider = !!provider;
   if(_provider == false) {
-    let Providers = torrentSearch.getProviders();
     Providers.forEach((provider, idx) => {
-      providers.push(provider.name);
+      torrentSearch.enableProvider(provider.name);
     })
   } else {
-    providers.push(provider);
+    torrentSearch.enableProvider(provider);
   }
 
-  console.log(providers);
-  torrentSearch.search(providers, query, 'Movies', '20')
+  console.log(torrentSearch.getActiveProviders());
+
+  //search for torrents
+  torrentSearch.search(query, 'Movies', '20')
     .then(torrents => {
       console.log(torrents);
       res.send({
