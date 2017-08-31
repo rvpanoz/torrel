@@ -8,6 +8,13 @@ class ListItem extends React.Component {
     super(props);
     this.handleDownload = this.handleDownload.bind(this);
   }
+  componentWillMount() {
+    let title = this.props.title, peers = this.props.peers;
+    let pattern = /1080|evo|yify|720|brrip|hdrip|dvdrip|xvid/i;
+    this.setState({
+      watchable: pattern.test(title) || peers < 1
+    });
+  }
   handleDownload(e) {
     e.preventDefault();
     let torrent = {};
@@ -18,21 +25,30 @@ class ListItem extends React.Component {
       }
     }
 
-    axios.get(`${config.baseUrl}/download`, {
-      params: {
-        torrent: torrent,
-        responseType: 'arraybuffer'
-      }
+    axios.post(`${config.baseUrl}/download`, {
+      data: {
+        torrent: torrent
+      },
+      timeout: 5000,
     }).then((response) => {
-      //TODO
-      console.log(response);
+      let data = response.data;
+      let link = document.createElement('a');
+      link.href = `${config.baseUrl}/${data.fileName}`;
+      link.download = data.fileName;
+      link.click();
+    }).catch(err=>{
+      throw new Error(err);
     });
   }
   render() {
     return (
       <tr role="row">
         <td>
-          <p>{this.props.title}</p>
+          <p style={{
+              color: (this.state.watchable) ? 'green' : 'red'
+            }} ref={(el)=>{
+              this.elTitle = el;
+            }}>{this.props.title}</p>
         </td>
         <td>{this.props.peers}</td>
         <td>{this.props.seeds}</td>
@@ -60,10 +76,10 @@ export default class List extends React.Component {
 
     return (
       <div>
-        <div className="panel panel-default" style={{display: 'block'}}>
-          <div className="panel-heading">
-
-          </div>
+        <div className="panel panel-default" style={{
+          display: 'block'
+        }}>
+          <div className="panel-heading"></div>
           <div className="panel-body">
             <div className="table-responsive">
               <div className="row">

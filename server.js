@@ -3,6 +3,7 @@ const fs = require('fs');
 const express = require('express');
 const app = express();
 const cors = require('cors');
+const bodyParser = require('body-parser');
 const TorrentSearchApi = require('torrent-search-api');
 const moment = require('moment');
 const torrentSearch = new TorrentSearchApi();
@@ -11,7 +12,10 @@ const Providers = torrentSearch.getProviders().filter((provider, idx) => {
   return provider.public;
 })
 
-app.use(cors()); //use cors middleware
+//middlewares
+app.use(express.static('torrents'));
+app.use(bodyParser.json());
+app.use(cors());
 
 app.get('/providers', (req, res) => {
   res.send({
@@ -20,19 +24,18 @@ app.get('/providers', (req, res) => {
   })
 });
 
-app.get('/download', (req, res) => {
+app.post('/download', (req, res) => {
   let {
     torrent
-  } = req.query || {}, success = false, data;
+  } = req.body.data || {}, success = false, data;
 
   if(!torrent) {
-    res.send({
+    return res.send({
       success: false,
       message: '[torrent] parameter is not defined.'
     });
   }
 
-  torrent = JSON.parse(torrent);
   torrentSearch.downloadTorrent(torrent)
     .then(buffer => {
       const title = torrent.title;
@@ -40,24 +43,10 @@ app.get('/download', (req, res) => {
       let fileName = `${title}.torrent`;
       let filePath = path.join(__dirname, `torrents`);
 
-      fs.writeFile(path.resolve(filePath, fileName), buffer, 'utf-8', (err, fp) => {
-        var options = {
-          root: __dirname + '/torrents/',
-          dotfiles: 'deny',
-          headers: {
-            'x-timestamp': Date.now(),
-            'x-sent': true,
-            'Content-Disposition': 'attachment; filename=' + fileName,
-            'Content-type': 'application/x-bittorrent'
-          }
-        };
-
-        res.sendFile(fileName, options, (err) => {
-          if (err) {
-            console.log(err);
-          } else {
-            console.log('Sent:', fileName);
-          }
+      fs.writeFile(path.resolve(filePath, fileName), buffer, 'binary', (err, fp) => {
+        res.send({
+          success: true,
+          fileName: fileName
         });
       });
     })
@@ -71,6 +60,7 @@ app.get('/search', (req, res) => {
   let {
     query,
     category,
+    perPage,
     provider
   } = req.query;
 
@@ -84,21 +74,23 @@ app.get('/search', (req, res) => {
   //clean query string
   query = query.replace(/[^a-zA-Z ]/gi, '');
 
-  let _provider = !!provider;
-  if(_provider == false) {
+  //category - default to 'Movies'
+  category = category || 'Movies';
+
+  //page limit
+  perPage = perPage || 20;
+
+  if(provider == 0) {
     Providers.forEach((provider, idx) => {
       torrentSearch.enableProvider(provider.name);
-    })
+    });
   } else {
     torrentSearch.enableProvider(provider);
   }
 
-  console.log(torrentSearch.getActiveProviders());
-
   //search for torrents
-  torrentSearch.search(query, 'Movies', '20')
+  torrentSearch.search(query, category, perPage)
     .then(torrents => {
-      console.log(torrents);
       res.send({
         success: true,
         data: torrents

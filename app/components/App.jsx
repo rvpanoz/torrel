@@ -52,7 +52,13 @@ class App extends React.Component {
   }
   handleQuery(q, cb) {
     this.setState({showLoader: true, torrents: []}); //clear
-    this.serverRequest = axios.get(`${config.baseUrl}/search?query=${q[0]}\&provider=${q[1]}\&category=${config.defaultCategory}`).then((resp) => {
+    this.serverRequest = axios.get(`${config.baseUrl}/search`, {
+      params: {
+        query: q[0],
+        provider: q[1],
+        perPage: q[2]
+      }
+    }).then((resp) => {
       setTimeout(() => {
         this.setState((prevState, props) => ({showLoader: false, torrents: resp.data.data}));
         if (cb && typeof cb === 'function') {
@@ -62,7 +68,6 @@ class App extends React.Component {
     });
   }
   render() {
-    console.log(!!this.state.torrents.length, this.state.torrents.length);
     return (
       <div className="app_content__wrapper">
         <AppLoader isLoading={this.state.showLoader} />

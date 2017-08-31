@@ -43,9 +43,11 @@ class SearchForm extends React.Component {
 
     let query = this.textInput.value;
     let provider = this.selectInput.value;
+    let perPage = this.limitInput.value;
+
     if (query.length) {
       this._setDisabled();
-      this.props.handleQuery([query, provider], this._setEnabled);
+      this.props.handleQuery([query, provider, perPage], this._setEnabled);
     }
     return false;
   }
@@ -85,6 +87,15 @@ class SearchForm extends React.Component {
           }}>
           <option value="0">All providers</option>
           {this.state.providers.map((provider, idx) => <ProviderOption key={idx} {...provider}/>)}
+        </select>
+        &nbsp;
+        <select name="limit" className="form-control" ref={(select) => {
+            this.limitInput = select;
+          }}>
+          <option value="15">Per page</option>
+          <option value="15">15</option>
+          <option value="20">25</option>
+          <option value="50">50</option>
         </select>
       </form>
     )
