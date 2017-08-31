@@ -15,7 +15,6 @@ body, input, textarea, select {
   line-height: 1.5em;
   color: #676d79;
   font-weight: 300;
-  /*background: #272d39;*/
   background: rgba(55, 61, 73, 0.975);
   color: #fff;
   box-shadow: none;

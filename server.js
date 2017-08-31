@@ -65,9 +65,11 @@ app.get('/download', (req, res) => {
 })
 
 app.get('/search', (req, res) => {
+  let providers = [];
   let {
     query,
-    category
+    category,
+    provider
   } = req.query;
 
   if (!query) {
@@ -79,13 +81,21 @@ app.get('/search', (req, res) => {
 
   //clean query string
   query = query.replace(/[^a-zA-Z ]/gi, '');
-  
-  // torrentSearch.enableProvider('Torrent9');
-  // // torrentSearch.enableProvider('ThePirateBay');
-  // // torrentSearch.enableProvider('Torrentz2');
 
-  torrentSearch.search(query, 'Movies', '20')
+  let _provider = !!provider;
+  if(_provider == false) {
+    let Providers = torrentSearch.getProviders();
+    Providers.forEach((provider, idx) => {
+      providers.push(provider.name);
+    })
+  } else {
+    providers.push(provider);
+  }
+
+  console.log(providers);
+  torrentSearch.search(providers, query, 'Movies', '20')
     .then(torrents => {
+      console.log(torrents);
       res.send({
         success: true,
         data: torrents

@@ -43,8 +43,9 @@ class SearchForm extends React.Component {
     this._setDisabled();
 
     let query = this.textInput.value;
+    let provider = this.selectInput.value;
     if (query.length) {
-      this.props.handleQuery(query, this._setEnabled);
+      this.props.handleQuery([query, provider], this._setEnabled);
     }
     return false;
   }
@@ -75,7 +76,9 @@ class SearchForm extends React.Component {
             </button>
           </div>
         </div>
-        <select className="form-control">
+        <select name="providers" className="form-control" ref={(select) => {
+            this.selectInput = select;
+          }}>
           <option value="0">All providers</option>
           {this.state.providers.map((provider, idx) => <ProviderOption key={idx} {...provider}/>)}
         </select>
