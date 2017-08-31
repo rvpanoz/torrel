@@ -40,11 +40,11 @@ class SearchForm extends React.Component {
   }
   onSubmitEvent(e) {
     e.preventDefault();
-    this._setDisabled();
 
     let query = this.textInput.value;
     let provider = this.selectInput.value;
     if (query.length) {
+      this._setDisabled();
       this.props.handleQuery([query, provider], this._setEnabled);
     }
     return false;
@@ -58,8 +58,9 @@ class SearchForm extends React.Component {
     })
   }
   componentDidMount() {
-    if(this.textInput)
+    if(this.textInput) {
       this._focus();
+    }
   }
   componentWillUnmount() {
     this.serverRequest.abort();
@@ -83,7 +84,7 @@ class SearchForm extends React.Component {
             this.selectInput = select;
           }}>
           <option value="0">All providers</option>
-          {this.state.providers.map((provider, idx) => <ProviderOption name={provider} key={idx} />)}
+          {this.state.providers.map((provider, idx) => <ProviderOption key={idx} {...provider}/>)}
         </select>
       </form>
     )
