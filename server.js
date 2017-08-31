@@ -77,11 +77,12 @@ app.get('/search', (req, res) => {
     });
   }
 
-  query = query.replace(/["']{1}/gi, '');
-
-  torrentSearch.enableProvider('Torrent9');
-  // torrentSearch.enableProvider('ThePirateBay');
-  // torrentSearch.enableProvider('Torrentz2');
+  //clean query string
+  query = query.replace(/[^a-zA-Z ]/gi, '');
+  
+  // torrentSearch.enableProvider('Torrent9');
+  // // torrentSearch.enableProvider('ThePirateBay');
+  // // torrentSearch.enableProvider('Torrentz2');
 
   torrentSearch.search(query, 'Movies', '20')
     .then(torrents => {

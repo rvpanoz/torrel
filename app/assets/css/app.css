@@ -29,6 +29,10 @@ body, input, textarea, select {
   z-index: 999;
 }
 
+.navbar-default {
+  background-color: #885757 !important;
+}
+
 .navbar-brand {
   border: 0 !important;
 }
