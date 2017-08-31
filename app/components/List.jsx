@@ -54,8 +54,7 @@ export default class List extends React.Component {
     }
   }
   render() {
-    console.log('list render')
-    if (!this.props.torrents) {
+    if (!this.props.torrents || this.props.torrents.length === 0) {
       return null;
     }
 
@@ -63,13 +62,12 @@ export default class List extends React.Component {
       <div>
         <div className="panel panel-default" style={{display: 'block'}}>
           <div className="panel-heading">
-            <h3 className="panel-title">Results</h3>
-            <i className="fa fa-settings"></i>
+
           </div>
           <div className="panel-body">
             <div className="table-responsive">
               <div className="row">
-                <div className="col-xs=12">
+                <div className="col-xs-12">
                   <table className="table">
                     <thead>
                       <tr role="row">

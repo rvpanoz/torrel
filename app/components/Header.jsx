@@ -1,10 +1,21 @@
 import config from '../config';
 import React from 'react';
 import ReactDOM from 'react-dom';
+import axios from 'axios';
+
+const ProviderOption = (props) => {
+  return (
+    <option value={props.name}>{props.name}</option>
+  )
+}
 
 class SearchForm extends React.Component {
   constructor(props) {
     super(props)
+    this.state = {
+      providers: []
+    }
+
     this._focus = this._focus.bind(this);
     this.onChangeQuery = this.onChangeQuery.bind(this);
     this.onSubmitEvent = this.onSubmitEvent.bind(this);
@@ -37,8 +48,17 @@ class SearchForm extends React.Component {
     }
     return false;
   }
+  componentWillMount() {
+    axios.get(`${config.baseUrl}/providers`)
+    .then((resp) => {
+      this.setState({
+        providers: resp.data.data
+      })
+    })
+  }
   componentDidMount() {
-    this._focus();
+    if(this.textInput)
+      this._focus();
   }
   render() {
     return (
@@ -55,6 +75,10 @@ class SearchForm extends React.Component {
             </button>
           </div>
         </div>
+        <select className="form-control">
+          <option value="0">All providers</option>
+          {this.state.providers.map((provider, idx) => <ProviderOption key={idx} {...provider}/>)}
+        </select>
       </form>
     )
   }

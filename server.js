@@ -5,11 +5,20 @@ const app = express();
 const cors = require('cors');
 const TorrentSearchApi = require('torrent-search-api');
 const moment = require('moment');
+const torrentSearch = new TorrentSearchApi();
 
-app.use(cors());
+app.use(cors()); //use cors middleware
+torrentSearch.enableProvider('1337x'); //default provider
 
-app.get('/download', function(req, res) {
-  const torrentSearch = new TorrentSearchApi();
+app.get('/providers', (req, res) => {
+  let providers = torrentSearch.getProviders();
+  res.send({
+    success: true,
+    data: providers
+  })
+});
+
+app.get('/download', (req, res) => {
   let {
     torrent
   } = req.query || {}, success = false, data;
@@ -29,7 +38,7 @@ app.get('/download', function(req, res) {
       let fileName = `${title}.torrent`;
       let filePath = path.join(__dirname, `torrents`);
 
-      fs.writeFile(path.resolve(filePath, fileName), buffer, 'utf-8', function(err, fp) {
+      fs.writeFile(path.resolve(filePath, fileName), buffer, 'utf-8', (err, fp) => {
         var options = {
           root: __dirname + '/torrents/',
           dotfiles: 'deny',
@@ -41,7 +50,7 @@ app.get('/download', function(req, res) {
           }
         };
 
-        res.sendFile(fileName, options, function(err) {
+        res.sendFile(fileName, options, (err) => {
           if (err) {
             console.log(err);
           } else {
@@ -55,11 +64,7 @@ app.get('/download', function(req, res) {
     });
 })
 
-app.get('/search', function(req, res) {
-  const torrentSearch = new TorrentSearchApi();
-
-  console.log(req.query);
-
+app.get('/search', (req, res) => {
   let {
     query,
     category
@@ -75,11 +80,10 @@ app.get('/search', function(req, res) {
   query = query.replace(/["']{1}/gi, '');
 
   torrentSearch.enableProvider('Torrent9');
-  // torrentSearch.enableProvider('1337x');
   // torrentSearch.enableProvider('ThePirateBay');
   // torrentSearch.enableProvider('Torrentz2');
 
-  torrentSearch.search(query, 'Movies', '10')
+  torrentSearch.search(query, 'Movies', '20')
     .then(torrents => {
       res.send({
         success: true,
@@ -91,6 +95,6 @@ app.get('/search', function(req, res) {
     });
 })
 
-app.listen(3001, function() {
+app.listen(3001, () => {
   console.log('Server listening on port 3001')
 })

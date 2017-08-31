@@ -18,8 +18,6 @@ import bootstrapCSS from 'bootstrap/dist/css/bootstrap.css';
 import themeCSS from '../assets/css/theme.css';
 import appCSS from '../assets/css/app.css';
 
-
-
 /**
  * [Layout description]
  * @param {[type]} props [description]
@@ -50,31 +48,22 @@ class App extends React.Component {
     this.handleQuery = this.handleQuery.bind(this);
   }
   handleQuery(query, cb) {
-    this.setState({showLoader: true});
+    this.setState({showLoader: true, torrents: []}); //clear
     axios.get(`${config.baseUrl}/search?query=${query}\&category=${config.defaultCategory}`).then((resp) => {
-        setTimeout(() => {
-          this.setState((prevState, props) => ({
-            showLoader: false,
-            torrents: resp.data.data
-          }));
-          if(cb && typeof cb === 'function') {
-            cb();
-          }
-        }, 1500)
+      setTimeout(() => {
+        this.setState((prevState, props) => ({showLoader: false, torrents: resp.data.data}));
+        if (cb && typeof cb === 'function') {
+          cb();
+        }
+      }, 1500)
     });
   }
   render() {
+    console.log(!!this.state.torrents.length);
     return (
       <div className="app_content__wrapper">
-        <AppLoader isLoading={this.state.showLoader} ref={(el) => {
-          this.loader = el;
-        }}/>
-      <Layout header={< Header handleQuery = {
-          this.handleQuery
-        } />} content= {<Content isVisible={!this.state.showLoader
-      } torrents = {
-        this.state.torrents
-      } />}/>
+        <AppLoader isLoading={this.state.showLoader} />
+        <Layout header={<Header handleQuery = {this.handleQuery} />} content= {<Content isVisible={!!this.state.torrents.length} torrents = {this.state.torrents} />} />
       </div>
     )
   }
